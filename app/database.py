@@ -5,6 +5,8 @@ import certifi
 
 
 from models.user import User
+from models.session import Session
+
 import os
 
 from dotenv import load_dotenv
@@ -20,4 +22,4 @@ async def init_db():
     # Create a MongoDB client
     client = AsyncIOMotorClient(CONNECTION_STRING, tlsCAFile=certifi.where())
 
-    await init_beanie(database=client.hackathon, document_models=[ User])
+    await init_beanie(database=client.hackathon, document_models=[ User, Session])

@@ -1,9 +1,9 @@
 
-from pydantic import BaseModel
+from beanie import Document, Indexed
 
 
-class User(BaseModel):
+class User(Document):
     name:str 
-    email: str
+    email: Indexed(str, unique=True)
     role:str
         
