@@ -75,27 +75,3 @@ async def secure_endoint(token: Annotated[str, Depends(oauth2_scheme)]):
     get_user_info = await User.find_one(User.email == email)
     print(get_user_info)
     return get_user_info
-
-@router.post("/auth_by_token")
-async def auth_by_token(token_model: TokenModel):
-    try:
-        decoded = jwt.decode(token_model.token,key= None, options={"verify_signature": False})
-    except ExpiredSignatureError:
-        raise HTTPException(status_code=401, detail="Token expired")
-    except JWTError:
-        raise HTTPException(status_code=401, detail="Token error")
-
-    # Generate a three-digit code
-    code = generate_three_digit_code()
-    while await Code.find_one(Code.code == code):
-        code = generate_three_digit_code()
-
-    #Store CODE DB
-    code_to_store= Code(code=code, id_user=decoded.get("email"))
-    await code_to_store.create()
-
-    THREE_DIGIT_CODES = code
-    return THREE_DIGIT_CODES
-        
-        
-
