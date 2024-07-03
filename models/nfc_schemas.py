@@ -1,5 +1,6 @@
+from beanie import Document
 from pydantic import BaseModel
-from beanie import Document, Link
+
 
 class TokenModel(BaseModel):
     token: str

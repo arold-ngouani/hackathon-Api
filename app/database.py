@@ -4,6 +4,7 @@ from beanie import init_beanie
 import certifi
 
 
+from models.nfc_schemas import Code
 from models.user import User
 from models.session import Session
 
@@ -22,4 +23,4 @@ async def init_db():
     # Create a MongoDB client
     client = AsyncIOMotorClient(CONNECTION_STRING, tlsCAFile=certifi.where())
 
-    await init_beanie(database=client.hackathon, document_models=[ User, Session])
+    await init_beanie(database=client.hackathon, document_models=[ User, Session, Code])
