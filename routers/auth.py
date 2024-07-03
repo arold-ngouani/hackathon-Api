@@ -75,7 +75,7 @@ async def secure_endoint(token: Annotated[str, Depends(oauth2_scheme)]):
     get_user_info = await User.find_one(User.email == email)
     print(get_user_info)
     return get_user_info
-
+  
 @router.post("/auth_by_token")
 async def auth_by_token(token_model: TokenModel):
     try:
@@ -93,4 +93,3 @@ async def auth_by_token(token_model: TokenModel):
     await new_session.create()
     return token
         
-
