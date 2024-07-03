@@ -54,7 +54,7 @@ async def validate_code(code_model: CodeVerificationModel):
     await code_info.delete()
     token = utilities.generate_token(given_id= id_user,given_role=role)
     get_user_info = await User.find_one(User.email == id_user)
-    new_session = Session(user_id= get_user_info.id)
+    new_session = Session(user_id= get_user_info.id, email= id_user, name=get_user_info.name)
     await new_session.create()
     return token
 
