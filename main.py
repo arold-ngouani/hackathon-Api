@@ -1,6 +1,7 @@
 from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
+import routers.auth
 import routers.user 
 import routers.session
 from app.database import init_db
@@ -15,6 +16,7 @@ app = FastAPI(lifespan=lifespan)
 
 
 
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -23,6 +25,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 # Ajouter les routers dédiés
 app.include_router(routers.user.router)
 app.include_router(routers.session.router)
+app.include_router(routers.auth.router)
