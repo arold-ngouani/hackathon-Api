@@ -21,6 +21,6 @@ async def init_db():
     CONNECTION_STRING = os.getenv('DB_URL')
 
     # Create a MongoDB client
-    client = AsyncIOMotorClient("mongodb+srv://zebestchris:BjA1DU92u87FnxpV@myestiam.pb85vbh.mongodb.net/", tlsCAFile=certifi.where())
+    client = AsyncIOMotorClient(CONNECTION_STRING, tlsCAFile=certifi.where())
 
     await init_beanie(database=client.hackathon, document_models=[ User, Session, Code])
