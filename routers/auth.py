@@ -1,11 +1,15 @@
 import random
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status
 from jose import ExpiredSignatureError, jwt, JWTError
 from models.nfc_schemas import Code, TokenModel, CodeVerificationModel
 from models.session import Session
 from models.user import User
+from fastapi.security import OAuth2PasswordBearer
 import utilities
+from typing import Annotated, List
 
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/validate_code")
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
 THREE_DIGIT_CODES = {}
@@ -55,6 +59,19 @@ async def validate_code(code_model: CodeVerificationModel):
     return token
 
 
-async def mafonction():
 
-    return
+#Protect route to get personal data
+@router.get('/me')
+async def secure_endoint(token: Annotated[str, Depends(oauth2_scheme)]):
+    try:
+        decoded = jwt.decode(token,key= None, options={"verify_signature": False})
+    except ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token expired")
+    except JWTError:
+        raise HTTPException(status_code=401, detail="Token error")
+    
+    email= decoded.get('user_id')
+    print(email)
+    get_user_info = await User.find_one(User.email == email)
+    print(get_user_info)
+    return get_user_info
