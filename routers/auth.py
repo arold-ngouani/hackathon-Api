@@ -15,7 +15,12 @@ def generate_three_digit_code():
 
 @router.post("/read_nfc")
 async def read_nfc(token_model: TokenModel):
-    decoded = jwt.decode(token_model.token,key= None, options={"verify_signature": False})
+    try:
+        decoded = jwt.decode(token_model.token,key= None, options={"verify_signature": False})
+    except ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token expired")
+    except JWTError:
+        raise HTTPException(status_code=401, detail="Token error")
 
     # Generate a three-digit code
     code = generate_three_digit_code()
