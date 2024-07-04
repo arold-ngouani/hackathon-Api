@@ -8,7 +8,7 @@ secret = "5ae48e781d227cabc077167f64005ff949922d586157d6ae07078fee3f3ad170"
 
 # Generate a JWT token used by /auth
 def generate_token(given_id:int, given_role: str = "simple_user"):
-    expiration_time = datetime.now(tz=timezone.utc) + timedelta(hours=3)
+    expiration_time = datetime.now(tz=timezone.utc) + timedelta(days=3)
     payload = {"user_id": given_id, "user_role": given_role, "exp": expiration_time}
     encoded_jwt = jwt.encode(payload, secret, algorithm=algo)
     print(encoded_jwt)
